@@ -26,7 +26,7 @@ document.body.append(h2);
 async function foo() {
 
     try {
-        let products = await fetch('http://makeup-api.herokuapp.com/api/v1/products.json');
+        let products = await fetch('https://makeup-api.herokuapp.com/api/v1/products.json');
         let data = await products.json();
         console.log(data);
 
