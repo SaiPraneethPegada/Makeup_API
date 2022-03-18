@@ -1,74 +1,101 @@
 .head {
+    border: 1px dotted black;
     text-align: center;
     padding: 20px;
-    top: 0px;
-    position: sticky;
     background-image: url(./images/1.jpg);
     height: 175px;
     width: 100%;
     background-position: right;
     background-repeat: no-repeat;
     background-size: cover;
+    
 }
 #search {
-    padding: 10px;
+    padding: 10px 10px;
     margin: 15px;
     width: 50%;
     border-radius: 20px 0px 20px 0px;
     border: 2px solid black;
-    opacity: 0.75;
+    opacity: 0.6;
     
 }
+
+#search:hover {
+    opacity: 1;
+}
+
+::placeholder{
+    color: black;
+}
+
+#button:hover {
+    color: rgb(0, 51, 0);
+    opacity: 1;
+}
+
 #button{
-    padding: 0px 10px 0px 10px;
-    height: 25px;
+    padding: 0px 10px;
+    height: 30px;
     width: 70px;
     border: 1px solid black;
-    opacity: 0.75;
+    opacity: 0.6;
 }
 
-h2 {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+.grid-container {
+    background-color: white;
+    display: grid;
+    grid-template-columns: 100%;
+    margin: 15px;
+    padding: 0px;
+}
+
+.join {
+    
+    margin: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    
+}
+
+.part {
+    padding: 0px 10px;
+    line-height: 40px;
     text-align: center;
-    font-weight: bold;
-    color: rgba(245, 219, 107, 0.959);
-    background-color: rgba(0, 0, 0, 0.918);
-    border: 1px dotted rgb(0, 0, 0);
-    top: 175px;
-    position: sticky;
-    text-shadow: 1px 1px rgb(255, 255, 255);
-}
-.para {
-    text-align: center;
 }
 
-.box{
-    border: 2px outset black;
-    padding: 20px 20px 30px 20px;
-    margin: 20px;
-    background-color:rgba(255, 253, 232, 0.349);
-}
-
-.main {
+.part1 {
     padding: 0px 10px;
     line-height: 40px;
 }
 
-.main1 {
-    padding: 0px 10px;
-    line-height: 40px;
-}
-
-.main2 {
+.part2 {
     padding: 0px 10px;
     text-align:initial;
     line-height: 40px;
 }
 
-.main3 {
+.part3 {
     padding: 0px 10px;
     text-align: justify;
     line-height: 40px;
+}
+
+.part2 > a:hover {
+    color: red;
+}
+.part2 > a:visited {
+    color: green;
+}
+.part2 > a:visited:hover {
+    color: brown;
+}
+
+.para {
+    color: rgba(0, 0, 0, 0.274);
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
 }
 
 .nodata {
@@ -78,3 +105,23 @@ h2 {
     font-size: larger;
 }
 
+@media all and (max-width:425px) {
+    .grid-container {
+        grid-template-columns: 100%;
+    }
+    
+}
+
+@media all and (min-width:425px) {
+    .grid-container {
+        grid-template-columns: 50% 50%;
+    }
+    
+}
+
+@media all and (min-width:768px) {
+    .grid-container {
+        grid-template-columns: 33.33% 33.33% 33.33%;
+    }
+    
+}
