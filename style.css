@@ -1,3 +1,7 @@
+body{
+    display:inline-flex;
+}
+
 .head {
     border: 1px dotted black;
     text-align: center;
