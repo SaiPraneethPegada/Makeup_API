@@ -1,102 +1,94 @@
-let content = document.createElement('main');
-content.setAttribute("class", "main");
+let navBar = document.createElement("main");
+navBar.setAttribute("class", "main");
 
+let nav = document.createElement("header");
+nav.setAttribute("class", "head");
 
+let searchInput = document.createElement("input");
+searchInput.setAttribute("id", "search");
+searchInput.setAttribute("placeholder", "Search for 'Product Name','Brand'...");
+nav.appendChild(searchInput);
+document.body.append(nav);
 
-let head = document.createElement('header');
-head.setAttribute("class", "head");
-
-let search = document.createElement('input');
-search.setAttribute("id", "search");
-search.setAttribute("placeholder", "Search for 'Brand','Product Name','Category'...");
-head.appendChild(search);
-document.body.appendChild(head);
-
-parabutton = document.createElement('p');
-
-let button = document.createElement('button');
-button.addEventListener("click", foo);
-button.setAttribute("id", "button");
+let button = document.createElement("button");
+button.addEventListener("click", search);
+button.setAttribute("class", "btn btn-info mb-2");
 button.innerHTML = "Search";
+nav.appendChild(button);
+document.body.appendChild(nav);
 
-parabutton.append(button);
-head.append(parabutton);
-document.body.append(head);
-
-content.append(head);
-document.body.append(content);
-
-
-
+navBar.appendChild(nav);
+document.body.append(navBar);
 
 let container = document.createElement("div");
 container.setAttribute("class", "grid-container");
+container.setAttribute("id", "main_container");
 
-async function foo() {
+navBar.appendChild(container);
+document.body.append(navBar);
 
-    try {
-        let products = await fetch('https://makeup-api.herokuapp.com/api/v1/products.json');
-        let data = await products.json();
-        console.log(data);
+let spinner = document.createElement("div");
+spinner.setAttribute("id", "spinner");
+spinner.setAttribute("hidden", true);
 
-        let user_input = document.getElementById("search").value;
-        let flag = 0;
+document.body.append(spinner);
 
+const url = "https://makeup-api.herokuapp.com/api/v1/products.json";
 
-        for (var i = 0; i < data.length; i++) {
+async function getData() {
+  spinner.removeAttribute("hidden");
+  main_container.innerHTML = "";
+  let response = await fetch(`${url}`);
+  //   console.log(response);
+  if (!response.ok) {
+    const message = `An error has occurred: ${response.status}`;
+    alert(message);
+    // throw new Error(message);
+  }
+  let products = await response.json();
+  //   console.log(data);
+  spinner.setAttribute("hidden", "");
+  // let limit_products = data.slice(0, 10);
+  products.map((product) => {
+    displayData(product);
+  });
+}
+getData();
 
-            if (user_input == data[i].brand || user_input == data[i].name || user_input == data[i].category) {
-                flag = 1;
+const displayData = (obj) => {
+  main_container.innerHTML += `<div class="card mb-3 rounded-3 px-5 pt-3" >
+    <h3 class="title text-center"><span>${obj.name}</span></h3>
+    <p><b>Brand:</b> ${obj.brand}</p>
+    <p><b>Price:</b> $${obj.price}</p>
+    <p class="text-wrap"><b>Image URL:</b> <a href="${obj.image_link}" target="_blank" >${obj.image_link}</a></p>
+    <p class="text-wrap"><b>Product URL:</b> <a href="${obj.product_link}" target="_blank" >${obj.product_link}</a></p>
+    <p><b>Description:</b> ${obj.description}</p>
+    </div>`;
+};
 
-                let join = document.createElement("div");
-                join.setAttribute("class", "join");
+async function search() {
+  main_container.innerHTML = "";
+  spinner.removeAttribute("hidden");
+  let searchTerm = document.querySelector("input").value.toLowerCase();
+  // console.log(searchTerm);
+  const response = await fetch(`${url}`);
+  const products = await response.json();
+  spinner.setAttribute("hidden", "");
 
-                let div = document.createElement('div');
-                div.setAttribute("class", "part");
-                div.innerHTML = `<b>Brand:</b> "${data[i].brand}" <br><b>Name:</b> "${data[i].name}"</br>`;
-                join.appendChild(div);
-                document.body.append(join);
-
-                let div1 = document.createElement('div');
-                div1.setAttribute("class", "part1");
-                div1.innerHTML = `<b>Price:</b> "${data[i].price}"`;
-                join.appendChild(div1);
-                document.body.append(join);
-
-                let div2 = document.createElement('div');
-                div2.setAttribute("class", "part2");
-                div2.innerHTML = `<b>Image link:</b> <a href="${data[i].image_link}" target="_blank">"Product Image"</a> 
-                <br><b>Product link:</b> <a href="${data[i].product_link} target="_blank">"${data[i].product_link}"</a></br>`;
-                join.appendChild(div2);
-                document.body.append(join);
-
-                let div3 = document.createElement('div');
-                div3.setAttribute("class", "part3");
-                div3.innerHTML = `<b>Description:</b> "${data[i].description}"`;
-                join.appendChild(div3);
-                document.body.append(join);
-
-                let para = document.createElement("p");
-                para.setAttribute("class", "para");
-                para.innerHTML = `<u>Search Result Position</u>: ${i}/930`;
-                join.appendChild(para);
-
-                container.appendChild(join);
-                content.appendChild(container);
-                document.body.append(content);
-
-            }
-        }
-        if (flag == 0) {
-            let nodata = document.createElement('p');
-            nodata.innerHTML = "Please enter valid product name!"
-            nodata.setAttribute("class", "nodata");
-            content.appendChild(nodata);
-            document.body.append(content);
-
-        }
+  if (searchTerm !== "") {
+    for (obj of products) {
+      let name = obj.name;
+      let brand = obj.brand;
+      if (
+        name.toLowerCase().includes(searchTerm) ||
+        brand.toLowerCase().includes(searchTerm)
+      ) {
+        displayData(obj);
+      }
     }
-    catch (error) {
-        console.log(Error);
-    }
+  } else {
+    products.map((product) => {
+      displayData(product);
+    });
+  }
 }
